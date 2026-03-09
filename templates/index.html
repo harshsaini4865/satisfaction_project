@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Satisfaction Survey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            animation: fadeIn 0.8s ease-out both;
+        }
+
+        .form-group:nth-child(2) { animation-delay: 0.1s; }
+        .form-group:nth-child(3) { animation-delay: 0.2s; }
+        .form-group:nth-child(4) { animation-delay: 0.3s; }
+        .form-group:nth-child(5) { animation-delay: 0.4s; }
+        .form-group:nth-child(6) { animation-delay: 0.5s; }
+        .form-group:nth-child(7) { animation-delay: 0.6s; }
+        .form-group:nth-child(8) { animation-delay: 0.7s; }
+        .form-group:nth-child(9) { animation-delay: 0.8s; }
+        .form-group:nth-child(10) { animation-delay: 0.9s; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+
+        label:hover {
+            color: #667eea;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .rating-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .rating-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .rating-item label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+        }
+
+        .star {
+            font-size: 1.5em;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .star:hover {
+            color: #ffd700;
+            transform: scale(1.2);
+        }
+
+        .star.active {
+            color: #ffd700;
+            animation: pulse 0.3s ease;
+        }
+
+        .star.hover {
+            color: #ffed4e;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            animation: fadeIn 1s ease-out 1s both;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 600;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .result.satisfied {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: #2c5282;
+        }
+
+        .result.neutral {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            color: #8b4513;
+        }
+
+        .result.dissatisfied {
+            background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+            color: #8b0000;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .rating-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✈️ Customer Satisfaction</h1>
+            <p>Help us improve your travel experience</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <form id="satisfactionForm">
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="customerType">Customer Type</label>
+                <select id="customerType" name="customerType" required>
+                    <option value="">Select Customer Type</option>
+                    <option value="Loyal Customer">Loyal Customer</option>
+                    <option value="disloyal Customer">Disloyal Customer</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="travelType">Type of Travel</label>
+                <select id="travelType" name="travelType" required>
+                    <option value="">Select Travel Type</option>
+                    <option value="Personal Travel">Personal Travel</option>
+                    <option value="Business travel">Business Travel</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="class">Class</label>
+                <select id="class" name="class" required>
+                    <option value="">Select Class</option>
+                    <option value="Eco">Economy</option>
+                    <option value="Eco Plus">Economy Plus</option>
+                    <option value="Business">Business</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" min="1" max="100" required placeholder="Enter your age">
+            </div>
+
+            <div class="form-group">
+                <label for="flightDistance">Flight Distance (miles)</label>
+                <input type="number" id="flightDistance" name="flightDistance" min="1" required placeholder="Enter flight distance">
+            </div>
+
+            <div class="form-group">
+                <label>Service Ratings *</label>
+                <div class="rating-group">
+                    <div class="rating-item">
+                        <label>Entertainment</label>
+                        <div class="star-rating" data-name="entertainment">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                        <input type="hidden" name="entertainment" id="entertainment" required>
+                    </div>
+                    <div class="rating-item">
+                        <label>Baggage</label>
+                        <div class="star-rating" data-name="baggage">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                        <input type="hidden" name="baggage" id="baggage" required>
+                    </div>
+                    <div class="rating-item">
+                        <label>Cleanliness</label>
+                        <div class="star-rating" data-name="cleanliness">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                        <input type="hidden" name="cleanliness" id="cleanliness" required>
+                    </div>
+                </div>
+                <small style="color: #666; display: block; margin-top: 5px;">* Required fields - Please rate all services</small>
+            </div>
+
+            <div class="form-group">
+                <label for="departureDelay">Departure Delay (minutes)</label>
+                <input type="number" id="departureDelay" name="departureDelay" min="0" required placeholder="Enter departure delay">
+            </div>
+
+            <div class="form-group">
+                <label for="arrivalDelay">Arrival Delay (minutes)</label>
+                <input type="number" id="arrivalDelay" name="arrivalDelay" min="0" required placeholder="Enter arrival delay">
+            </div>
+
+            <button type="submit" class="submit-btn">Predict Satisfaction</button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing your feedback...</p>
+        </div>
+
+        <div id="result" class="result" style="display: none;"></div>
+        <div id="error" class="error-message" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Star rating functionality
+        document.querySelectorAll('.star-rating').forEach(rating => {
+            const stars = rating.querySelectorAll('.star');
+            const hiddenInput = document.getElementById(rating.dataset.name);
+            
+            stars.forEach((star, index) => {
+                star.addEventListener('mouseenter', () => {
+                    stars.forEach((s, i) => {
+                        s.classList.toggle('hover', i <= index);
+                    });
+                });
+                
+                star.addEventListener('mouseleave', () => {
+                    stars.forEach(s => s.classList.remove('hover'));
+                });
+                
+                star.addEventListener('click', () => {
+                    const value = index + 1;
+                    hiddenInput.value = value;
+                    
+                    stars.forEach((s, i) => {
+                        s.classList.toggle('active', i < value);
+                    });
+                    
+                    // Add click animation
+                    star.style.transform = 'scale(1.3)';
+                    setTimeout(() => {
+                        star.style.transform = 'scale(1)';
+                    }, 150);
+                    
+                    // Update progress after rating
+                    updateProgress();
+                });
+            });
+        });
+
+        // Progress bar
+        function updateProgress() {
+            const form = document.getElementById('satisfactionForm');
+            const inputs = form.querySelectorAll('input[required], select[required]');
+            const filledInputs = Array.from(inputs).filter(input => input.value.trim() !== '');
+            const progress = (filledInputs.length / inputs.length) * 100;
+            
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Add event listeners for progress tracking
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('input', updateProgress);
+            input.addEventListener('change', updateProgress);
+        });
+
+        // Form submission with error handling
+        document.getElementById('satisfactionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Hide previous results/errors
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Validate required rating fields
+            const requiredRatings = ['entertainment', 'baggage', 'cleanliness'];
+            for (let rating of requiredRatings) {
+                if (!data[rating] || data[rating] === '') {
+                    showError('Please rate all service categories (Entertainment, Baggage, Cleanliness)');
+                    return;
+                }
+            }
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            
+            // Make API call to Flask backend
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.status === 'success') {
+                    showResult(result);
+                } else {
+                    showError(result.error || 'Failed to get prediction');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Unable to connect to the prediction service. Please check your connection and try again.');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+
+        function showResult(result) {
+            const resultDiv = document.getElementById('result');
+            let resultClass;
+            
+            if (result.prediction === 'satisfied') {
+                resultClass = 'satisfied';
+            } else if (result.prediction === 'neutral or dissatisfied') {
+                resultClass = 'neutral';
+            } else {
+                resultClass = 'dissatisfied';
+            }
+            
+            resultDiv.className = `result ${resultClass}`;
+            resultDiv.innerHTML = `
+                <h3>🎯 Prediction Result</h3>
+                <p>Based on your feedback, you are likely: <strong>${result.prediction}</strong></p>
+                <p>Confidence: ${(result.confidence * 100).toFixed(1)}%</p>
+                ${result.avg_rating ? `<p>Average Service Rating: ${result.avg_rating}/5.0</p>` : ''}
+                ${result.message ? `<p><small>${result.message}</small></p>` : ''}
+            `;
+            
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.innerHTML = `
+                <h4>❌ Error</h4>
+                <p>${message}</p>
+            `;
+            errorDiv.style.display = 'block';
+            errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Add input animations
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', () => {
+                input.parentElement.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
